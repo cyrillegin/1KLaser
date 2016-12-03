@@ -36,24 +36,55 @@ int main(void) {
 
 
 
-    	uint8_t i = 0;
+
 
     while(1) {
-    		//from (0,0) to (200,0)
-		for(;i<200;i++)  {
-			writeMCP492x(4096+i*10 ,SSX);
-			writeMCP492x(2048,SSY);
-		}
-		//from (200,0) to (100,100)
-		for(;i>100;i--)  {
-			writeMCP492x(4096+i*10 ,SSX);
-			writeMCP492x(4048-i*10,SSY);
-		}
-		//from (100,100) to (0,0)
-		for(;i>0;i--)  {
-			writeMCP492x(4096+i*10 ,SSX);
-			writeMCP492x(2048+i*10,SSY);
-		}
+    		uint8_t i = 0;
+    		for(;i<50;i++){
+    			drawTriangle();
+    		}
+    		for(;i>0;i--){
+    			drawSquare();
+    		}
+    }
+}
+
+void drawTriangle(){
+	uint8_t i = 0;
+	//from (0,0) to (200,0)
+	for(;i<200;i++)  {
+		writeMCP492x(4096+i*10 ,SSX);
+		writeMCP492x(2048,SSY);
+	}
+	//from (200,0) to (100,100)
+	for(;i>100;i--)  {
+		writeMCP492x(4096+i*10 ,SSX);
+		writeMCP492x(4048-i*10,SSY);
+	}
+	//from (100,100) to (0,0)
+	for(;i>0;i--)  {
+		writeMCP492x(4096+i*10 ,SSX);
+		writeMCP492x(2048+i*10,SSY);
+	}
+}
+
+void drawSquare(){
+	uint8_t i = 0;
+	for(;i<200;i++)  {
+		writeMCP492x(48+i*10 ,SSX);
+		writeMCP492x(1048,SSY);
+	}
+	for(;i>0;i--)  {
+		writeMCP492x(2048 ,SSX);
+		writeMCP492x(3048-i*10,SSY);
+	}
+	for(;i<200;i++)  {
+		writeMCP492x(2048-i*10 ,SSX);
+		writeMCP492x(3048,SSY);
+	}
+	for(;i>0;i--)  {
+		writeMCP492x(48 ,SSX);
+		writeMCP492x(1048+i*10,SSY);
 	}
 }
 
