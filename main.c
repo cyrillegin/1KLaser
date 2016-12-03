@@ -7,12 +7,12 @@
  * main.c
  */
 
-
+#define LASER BIT0
 #define SSOUT P1OUT
 #define SSX BIT6
 #define SSY BIT7
 void writeMCP492x(uint16_t data,uint8_t ss);
-
+void drawLine(uint8_t, uint8_t, uint8_t, uint8_t);
 
 int main(void) {
     WDTCTL = WDTPW | WDTHOLD;	// Stop watchdog timer
@@ -35,58 +35,45 @@ int main(void) {
      UCB0CTL1 &= ~UCSWRST;
 
 
+     while(1){
+    	 drawLine(192, 128, 160, 183);
+    	 drawLine(160, 183, 96, 183);
+    	 drawLine(96, 183, 64, 128);
+    	 drawLine(64, 128, 95, 72);
+    	 drawLine(95, 72, 160, 72);
+    	 drawLine(160, 72, 192, 128);
+     }
+}
+void drawLine(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2){
 
+	int dx = (int)x2 - (int)x1;
+	int dy = (int)y2 - (int)y1;
+	int steps;
+	    if (abs(dx) > abs(dy)){
+	        steps = abs(dx/4);
+	    }else{
+	        steps = abs(dy/4);
+	    }
 
+	    float Xincrement = (float) dx / (float) steps;
+	    float Yincrement = (float) dy / (float) steps;
 
-    while(1) {
-    		uint8_t i = 0;
-    		for(;i<50;i++){
-    			drawTriangle();
-    		}
-    		for(;i>0;i--){
-    			drawSquare();
-    		}
-    }
+	    float x = (float) x1;
+	    float y = (float) y1;
+	    int i;
+	    for(i = 0; i < steps; i++){
+	        x = x + Xincrement;
+	        y = y + Yincrement;
+			writeMCP492x( ((int)(x*16)),SSX);
+	        writeMCP492x( ((int)(y*16)),SSY);
+	    }
+	    i++;
 }
 
-void drawTriangle(){
-	uint8_t i = 0;
-	//from (0,0) to (200,0)
-	for(;i<200;i++)  {
-		writeMCP492x(4096+i*10 ,SSX);
-		writeMCP492x(2048,SSY);
-	}
-	//from (200,0) to (100,100)
-	for(;i>100;i--)  {
-		writeMCP492x(4096+i*10 ,SSX);
-		writeMCP492x(4048-i*10,SSY);
-	}
-	//from (100,100) to (0,0)
-	for(;i>0;i--)  {
-		writeMCP492x(4096+i*10 ,SSX);
-		writeMCP492x(2048+i*10,SSY);
-	}
+int abs(int val){
+	return (val<0 ? (-val) : val);
 }
 
-void drawSquare(){
-	uint8_t i = 0;
-	for(;i<200;i++)  {
-		writeMCP492x(48+i*10 ,SSX);
-		writeMCP492x(1048,SSY);
-	}
-	for(;i>0;i--)  {
-		writeMCP492x(2048 ,SSX);
-		writeMCP492x(3048-i*10,SSY);
-	}
-	for(;i<200;i++)  {
-		writeMCP492x(2048-i*10 ,SSX);
-		writeMCP492x(3048,SSY);
-	}
-	for(;i>0;i--)  {
-		writeMCP492x(48 ,SSX);
-		writeMCP492x(1048+i*10,SSY);
-	}
-}
 
 
 void writeMCP492x(uint16_t data,uint8_t ss) {
