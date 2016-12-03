@@ -15,7 +15,6 @@ void writeMCP492x(uint16_t data,uint8_t ss);
 
 
 int main(void) {
-	uint8_t i = 3;
     WDTCTL = WDTPW | WDTHOLD;	// Stop watchdog timer
      PM5CTL0 &= ~LOCKLPM5;//sets to 12 mh
 
@@ -27,26 +26,35 @@ int main(void) {
      ///////////////
      ///SPI Int//////
      ////////////////
-     	P5SEL0 |= BIT1 + BIT2;
-        UCB0CTLW0 |= UCSWRST;                     // **Put state machine in reset**
-     	UCB0CTLW0 |= UCMST+UCSYNC+UCCKPL+UCMSB;   // 3-pin, 8-bit SPI master MSB
-     	UCB0CTLW0 |= UCSSEL_2;                    // SMCLK
-     	UCB0BR0 |= 0x01;						  // CLK / 1
-     	UCB0BR1 = 0;
-     	UCB0CTL1 &= ~UCSWRST;
+     P5SEL0 |= BIT1 + BIT2;
+     UCB0CTLW0 |= UCSWRST;                     // **Put state machine in reset**
+     UCB0CTLW0 |= UCMST+UCSYNC+UCCKPL+UCMSB;   // 3-pin, 8-bit SPI master MSB
+     UCB0CTLW0 |= UCSSEL_2;                    // SMCLK
+     UCB0BR0 |= 0x01;						  // CLK / 1
+     UCB0BR1 = 0;
+     UCB0CTL1 &= ~UCSWRST;
 
 
+
+    	uint8_t i = 0;
 
     while(1) {
-	for(i=0;i<255;i++)  {
-		writeMCP492x(2048 + i*4,SSX);
-		writeMCP492x(2048 - i*4,SSY);
+    		//from (0,0) to (200,0)
+		for(;i<200;i++)  {
+			writeMCP492x(4096+i*10 ,SSX);
+			writeMCP492x(2048,SSY);
 		}
-	for(i=255;i>0;i--)  {
-		writeMCP492x(2048 + i*4,SSX);
-		writeMCP492x(2048 - i*4,SSY);
+		//from (200,0) to (100,100)
+		for(;i>100;i--)  {
+			writeMCP492x(4096+i*10 ,SSX);
+			writeMCP492x(4048-i*10,SSY);
 		}
-    }
+		//from (100,100) to (0,0)
+		for(;i>0;i--)  {
+			writeMCP492x(4096+i*10 ,SSX);
+			writeMCP492x(2048+i*10,SSY);
+		}
+	}
 }
 
 
