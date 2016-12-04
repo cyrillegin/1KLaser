@@ -35,17 +35,16 @@ int main(void) {
      UCB0CTL1 &= ~UCSWRST;
 
      //double hex
-//     uint16_t myPoly[] = {192, 128, 160, 183, 96, 183, 64, 128, 95, 72, 160, 72, 192, 128, 160, 128, 144, 155, 112, 155, 96, 128, 111, 100, 144, 100, 160, 128};
-//     uint16_t polyLength = 28;
-//     uint16_t offIndices[] = {12, 26};
-//     uint16_t offLength = 2;
+     uint16_t myPoly[] = {192, 128, 160, 183, 96, 183, 64, 128, 95, 72, 160, 72, 192, 128, 160, 128, 144, 155, 112, 155, 96, 128, 111, 100, 144, 100, 160, 128};
+     uint16_t polyLength = 28;
+     uint16_t offIndices[] = {12, 26};
+     uint16_t offLength = 2;
 
      //penrose triangle
-     uint16_t myPoly[] = {230, 220, 245, 185, 150, 5, 65, 155, 150, 155, 130, 110, 150, 75, 230, 220, 25, 220, 5, 185, 175, 185, 150, 155, 130, 110, 110, 155, 5, 185, 110, 5, 150, 5};
-     uint16_t polyLength = 34;
-     uint16_t offIndices[] = {22, 26, 32};
-     uint16_t offLength = 3;
-
+//     uint16_t myPoly[] = {230, 220, 245, 185, 150, 5, 65, 155, 150, 155, 130, 110, 150, 75, 230, 220, 25, 220, 5, 185, 175, 185, 150, 155, 130, 110, 110, 155, 5, 185, 110, 5, 150, 5};
+//     uint16_t polyLength = 34;
+//     uint16_t offIndices[] = {22, 26, 32};
+//     uint16_t offLength = 3;
 
      uint16_t offIter = 0;
      uint16_t myIndex = 0;
@@ -62,7 +61,7 @@ int main(void) {
 			 }
     	 	 }
     	 	 if(myIndex < polyLength-3){
-    	 		 drawLine(myPoly[myIndex], myPoly[myIndex+1], myPoly[myIndex+2], myPoly[myIndex+3]);
+    	 		drawLine(myPoly[myIndex], myPoly[myIndex+1], myPoly[myIndex+2], myPoly[myIndex+3]);
     	 		myIndex = myIndex +2;
     	 	 } else {
     	 		drawLine(myPoly[myIndex], myPoly[myIndex+1], myPoly[0], myPoly[1]);
@@ -82,21 +81,21 @@ void drawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2){
 	uint16_t dx = x1 > x2 ? x1 - x2 : x2 - x1;
 	uint16_t dy = y1 > y2 ? y1 - y2 : y2 - y1;
 
-	uint16_t steps = dx > dy ? dx/6 : dy/6;//use 4 or 8 to reduce size by ~15 bytes.
+	uint16_t steps = dx > dy ? dx/4 : dy/4;//(penrose only) use 6 for best result. use 4 or 8 to reduce size by ~15 bytes. 4 blinks and 8 seems too fast though..
 
-	uint16_t Xincrement = (dx*100) / steps;
-	uint16_t Yincrement = (dy*100) / steps;
+	uint16_t Xincrement = (dx*128) / steps;
+	uint16_t Yincrement = (dy*128) / steps;
 
-	int x = x1*100;
-	int y = y1*100;
+	int x = x1*128;
+	int y = y1*128;
 	int i;
 
 	for(i = 0; i < steps; i++){
 		x = x1 < x2 ? x+Xincrement : x - Xincrement;
 		y = y1 < y2 ? y+Yincrement : y - Yincrement;
 
-	    	writeMCP492x((int)((x/100)*16), SSX);
-	    	writeMCP492x((int)((y/100)*16), SSY);
+	    	writeMCP492x(x/8, SSX);//used to be: (x/128)*16
+	    	writeMCP492x(y/8, SSY);
 	}
 }
 
