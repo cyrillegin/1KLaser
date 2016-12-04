@@ -34,29 +34,27 @@ int main(void) {
      UCB0BR1 = 0;
      UCB0CTL1 &= ~UCSWRST;
 
+     uint16_t myPoly[] = {192, 128, 160, 183, 96, 183, 64, 128, 95, 72, 160, 72, 192, 128, 160, 128, 144, 155, 112, 155, 96, 128, 111, 100, 144, 100, 160, 128};
+     uint16_t polyLength = 28;
+     uint16_t offIndices[] = {12, 26};
+     uint16_t offLength = 2;
+     uint16_t offIter = 0;
+     uint16_t myIndex = 0;
 
      while(1){
-    	 	 drawLine(192, 128, 160, 183);
-//    	 	 drawLine(160, 183, 96, 183);
-//    	 	 drawLine(96, 183, 64, 128);
-//    	 	drawLine(64, 128, 95, 72);
-//    	 	drawLine(95, 72, 160, 72);
-//    	 	drawLine(160, 72, 192, 128);
-//
-//		 P1OUT &= ~LASER;
-//		 drawLine(192,128, 160, 128);
-//		 P1OUT |= LASER;
-//
-//		 drawLine(160, 128, 144, 155);
-//		 drawLine(144, 155, 112, 155);
-//		 drawLine(112, 155, 96, 128);
-//		 drawLine(96, 128, 111, 100);
-//		 drawLine(111, 100, 144, 100);
-//		 drawLine(144, 100, 160, 128);
-//
-//		 P1OUT &= ~LASER;
-//		 drawLine(160,128, 192, 128);
-//		 P1OUT |= LASER;
+    	 	 for(offIter = 0; offIter < offLength; offIter++){
+			 if(myIndex == offIndices[offIter]){
+				P1OUT &= ~LASER;
+			 }
+    	 	 }
+    	 	 if(myIndex < polyLength-3){
+    	 		 drawLine(myPoly[myIndex], myPoly[myIndex+1], myPoly[myIndex+2], myPoly[myIndex+3]);
+    	 		myIndex = myIndex +2;
+    	 	 } else {
+    	 		drawLine(myPoly[myIndex], myPoly[myIndex+1], myPoly[0], myPoly[1]);
+    	 		myIndex = 0;
+    	 	 }
+    	 	P1OUT |= LASER;
      }
 }
 
