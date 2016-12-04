@@ -34,10 +34,19 @@ int main(void) {
      UCB0BR1 = 0;
      UCB0CTL1 &= ~UCSWRST;
 
-     uint16_t myPoly[] = {192, 128, 160, 183, 96, 183, 64, 128, 95, 72, 160, 72, 192, 128, 160, 128, 144, 155, 112, 155, 96, 128, 111, 100, 144, 100, 160, 128};
-     uint16_t polyLength = 28;
-     uint16_t offIndices[] = {12, 26};
-     uint16_t offLength = 2;
+     //double hex
+//     uint16_t myPoly[] = {192, 128, 160, 183, 96, 183, 64, 128, 95, 72, 160, 72, 192, 128, 160, 128, 144, 155, 112, 155, 96, 128, 111, 100, 144, 100, 160, 128};
+//     uint16_t polyLength = 28;
+//     uint16_t offIndices[] = {12, 26};
+//     uint16_t offLength = 2;
+//     uint16_t offIter = 0;
+//     uint16_t myIndex = 0;
+
+     //penrose triangle
+     uint16_t myPoly[] = {230, 220, 245, 185, 150, 5, 65, 155, 150, 155, 130, 110, 150, 75, 230, 220, 25, 220, 5, 185, 175, 185, 150, 155, 130, 110, 110, 155, 5, 185, 110, 5, 150, 5};
+     uint16_t polyLength = 34;
+     uint16_t offIndices[] = {22, 26, 32};
+     uint16_t offLength = 3;
      uint16_t offIter = 0;
      uint16_t myIndex = 0;
 
