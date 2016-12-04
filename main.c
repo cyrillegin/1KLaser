@@ -12,7 +12,7 @@
 #define SSX BIT6
 #define SSY BIT7
 void writeMCP492x(uint16_t data,uint8_t ss);
-void drawLine(int, int, int, int);
+void drawLine(uint16_t, uint16_t, uint16_t, uint16_t);
 
 int main(void) {
     WDTCTL = WDTPW | WDTHOLD;	// Stop watchdog timer
@@ -37,109 +37,51 @@ int main(void) {
 
      while(1){
     	 	 drawLine(192, 128, 160, 183);
-    	 	 drawLine(160, 183, 96, 183);
-    	 	 drawLine(96, 183, 64, 128);
-    	 	drawLine(64, 128, 95, 72);
-    	 	drawLine(95, 72, 160, 72);
-    	 	drawLine(160, 72, 192, 128);
-
-		 P1OUT &= ~LASER;
-		 drawLine(192,128, 160, 128);
-		 P1OUT |= LASER;
-
-		 drawLine(160, 128, 144, 155);
-		 drawLine(144, 155, 112, 155);
-		 drawLine(112, 155, 96, 128);
-		 drawLine(96, 128, 111, 100);
-		 drawLine(111, 100, 144, 100);
-		 drawLine(144, 100, 160, 128);
-
-		 P1OUT &= ~LASER;
-		 drawLine(160,128, 192, 128);
-		 P1OUT |= LASER;
+//    	 	 drawLine(160, 183, 96, 183);
+//    	 	 drawLine(96, 183, 64, 128);
+//    	 	drawLine(64, 128, 95, 72);
+//    	 	drawLine(95, 72, 160, 72);
+//    	 	drawLine(160, 72, 192, 128);
+//
+//		 P1OUT &= ~LASER;
+//		 drawLine(192,128, 160, 128);
+//		 P1OUT |= LASER;
+//
+//		 drawLine(160, 128, 144, 155);
+//		 drawLine(144, 155, 112, 155);
+//		 drawLine(112, 155, 96, 128);
+//		 drawLine(96, 128, 111, 100);
+//		 drawLine(111, 100, 144, 100);
+//		 drawLine(144, 100, 160, 128);
+//
+//		 P1OUT &= ~LASER;
+//		 drawLine(160,128, 192, 128);
+//		 P1OUT |= LASER;
      }
-//     while(1){
-//    	 	 drawLine(192, 128, 160, 183);
-//    	 	 drawLine(160, 183, 192, 128);
-//     }
 }
 
-void drawLine(int x1, int y1, int x2, int y2){
+void drawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2){
 
-	int dx = (int)x2 - (int)x1;
-	int dy = (int)y2 - (int)y1;
+	uint16_t dx1 = x1 > x2 ? x1 - x2 : x2 - x1;
+	uint16_t dy1 = y1 > y2 ? y1 - y2 : y2 - y1;
 
-	volatile int dx1 = x1 > x2 ? x1 - x2 : x2 - x1;
-	volatile int dy1 = y1 > y2 ? y1 - y2 : y2 - y1;
+	uint16_t steps1 = dx1 > dy1 ? dx1/4 : dy1/4;
 
-	int steps;
-	if (abs(dx) > abs(dy)){
-	    steps = abs(dx/4);
-	}else{
-	    steps = abs(dy/4);
-	}
+	uint16_t Xincrement1 = (dx1*100) / steps1;
+	uint16_t Yincrement1 = (dy1*100) / steps1;
 
-	volatile int steps1 = dx1 > dy1 ? dx1/4 : dy1/4;
-
-	volatile float Xincrement = (float) dx / (float) steps;
-	volatile float Yincrement = (float) dy / (float) steps;
-
-	volatile int Xincrement1 = (dx1*100) / steps1;
-	volatile int Yincrement1 = (dy1*100) / steps1;
-
-	float x = (float) x1;
-	float y = (float) y1;
 	int x11 = x1*100;
 	int y11 = y1*100;
-	volatile int i;
-	int arrX[100];
-	int arrY[100];
-	int arrX1[100];
-	int arrY1[100];
+	int i;
 
+	for(i = 0; i < steps1; i++){
 
-	volatile int xInc = (int) (Xincrement*100);
-	volatile int yInc = (int) (Yincrement*100);
-	volatile int xStart = (int) (x*100);
-	volatile int yStart = (int) (y*100);
-
-
-
-	for(i = 0; i < steps; i++){
-	    x = x + Xincrement;
-	    y = y + Yincrement;
-		arrX[i] = (int)(x*16);
-	    arrY[i] = (int)(y*16);
-
-//	    writeMCP492x((int)(x*16), SSX);
-//	    	writeMCP492x((int)(y*16), SSY);
-
-	    	if(x1 < x2){
-	    		x11 = x11 + Xincrement1;
-	    	} else {
-	    		x11 = x11 - Xincrement1;
-	    	}
-	    	if(y1 < y2){
-	    		y11 = y11 + Yincrement1;
-	    	} else {
-	    		y11 = y11 - Yincrement1;
-	    	}
-	    arrX1[i] = (int)((x11/100)*16);
-	    	arrY1[i] = (int)((y11/100)*16);
+		x11 = x1 < x2 ? x11+Xincrement1 : x11 - Xincrement1;
+		y11 = y1 < y2 ? y11+Yincrement1 : y11 - Yincrement1;
 
 	    	writeMCP492x((int)((x11/100)*16), SSX);
 	    	writeMCP492x((int)((y11/100)*16), SSY);
 	}
-	i++;
-	arrX[0] = 5;
-	arrY[0] = 5;
-	arrX1[0] = 5;
-	arrY1[0] = 5;
-		x = xInc + yInc + xStart + yStart;
-}
-
-int abs(int val){
-	return (val<0 ? (-val) : val);
 }
 
 void writeMCP492x(uint16_t data,uint8_t ss) {
