@@ -39,21 +39,26 @@ int main(void) {
 //     uint16_t polyLength = 28;
 //     uint16_t offIndices[] = {12, 26};
 //     uint16_t offLength = 2;
-//     uint16_t offIter = 0;
-//     uint16_t myIndex = 0;
 
      //penrose triangle
      uint16_t myPoly[] = {230, 220, 245, 185, 150, 5, 65, 155, 150, 155, 130, 110, 150, 75, 230, 220, 25, 220, 5, 185, 175, 185, 150, 155, 130, 110, 110, 155, 5, 185, 110, 5, 150, 5};
      uint16_t polyLength = 34;
      uint16_t offIndices[] = {22, 26, 32};
      uint16_t offLength = 3;
+
+
      uint16_t offIter = 0;
      uint16_t myIndex = 0;
 
      while(1){
+    	 	 int off = 0;
     	 	 for(offIter = 0; offIter < offLength; offIter++){
 			 if(myIndex == offIndices[offIter]){
+				 int j;
+				 for(j = 0; j < 400; j++)
+					 continue;
 				P1OUT &= ~LASER;
+				off = 1;
 			 }
     	 	 }
     	 	 if(myIndex < polyLength-3){
@@ -63,31 +68,35 @@ int main(void) {
     	 		drawLine(myPoly[myIndex], myPoly[myIndex+1], myPoly[0], myPoly[1]);
     	 		myIndex = 0;
     	 	 }
-    	 	P1OUT |= LASER;
+    	 	 if(off == 1){
+    	 		int j;
+    	 		for(j = 0; j < 250; j++)
+    	 			continue;
+    	 		 P1OUT |= LASER;
+    	 	 }
      }
 }
 
 void drawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2){
 
-	uint16_t dx1 = x1 > x2 ? x1 - x2 : x2 - x1;
-	uint16_t dy1 = y1 > y2 ? y1 - y2 : y2 - y1;
+	uint16_t dx = x1 > x2 ? x1 - x2 : x2 - x1;
+	uint16_t dy = y1 > y2 ? y1 - y2 : y2 - y1;
 
-	uint16_t steps1 = dx1 > dy1 ? dx1/4 : dy1/4;
+	uint16_t steps = dx > dy ? dx/6 : dy/6;//use 4 or 8 to reduce size by ~15 bytes.
 
-	uint16_t Xincrement1 = (dx1*100) / steps1;
-	uint16_t Yincrement1 = (dy1*100) / steps1;
+	uint16_t Xincrement = (dx*100) / steps;
+	uint16_t Yincrement = (dy*100) / steps;
 
-	int x11 = x1*100;
-	int y11 = y1*100;
+	int x = x1*100;
+	int y = y1*100;
 	int i;
 
-	for(i = 0; i < steps1; i++){
+	for(i = 0; i < steps; i++){
+		x = x1 < x2 ? x+Xincrement : x - Xincrement;
+		y = y1 < y2 ? y+Yincrement : y - Yincrement;
 
-		x11 = x1 < x2 ? x11+Xincrement1 : x11 - Xincrement1;
-		y11 = y1 < y2 ? y11+Yincrement1 : y11 - Yincrement1;
-
-	    	writeMCP492x((int)((x11/100)*16), SSX);
-	    	writeMCP492x((int)((y11/100)*16), SSY);
+	    	writeMCP492x((int)((x/100)*16), SSX);
+	    	writeMCP492x((int)((y/100)*16), SSY);
 	}
 }
 
