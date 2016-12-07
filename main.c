@@ -14,20 +14,11 @@
 void writeMCP492x(uint16_t data,uint8_t ss);
 void drawLine(uint16_t, uint16_t, uint16_t, uint16_t);
 
-void mirrorX(uint16_t *arr, uint16_t length){
-	uint16_t i;
-	for(i=0; i < length; i++){
-		if(i%2 == 0){
-			arr[i] = 256 - arr[i];
-		}
-	}
-}
-
-void mirrorY(uint16_t *arr, uint16_t length){
-	uint16_t i;
-	for(i=0; i < length; i++){
-		if(i%2 == 1){
-			arr[i] = 256 - arr[i];
+void stall(uint16_t a){
+	uint16_t counter = a == 0 ? 8000 : 8000;
+	for(counter = 0; counter > 0; counter--){
+		if(counter < 1){
+			counter = 0;
 		}
 	}
 }
@@ -72,8 +63,10 @@ int main(void) {
      uint16_t myIndex = 0;
      uint16_t logoPart = 0;
      uint16_t mirrorCount = 4;
-     uint16_t laserDelay;
      uint16_t direction = 0;
+     uint16_t i;
+     uint16_t oldX;
+     uint16_t oldY;
      while(1){
     	 	 if(logoPart == 0){
     	 	 	 //Draws the wrenches
@@ -82,37 +75,37 @@ int main(void) {
 						drawLine(wrench[myIndex], wrench[myIndex+1], wrench[myIndex+2], wrench[myIndex+3]);
 						myIndex = myIndex +2;
 					  } else {
-						  for(laserDelay = 0; laserDelay < 400; laserDelay++)
-							  continue;
-						  P1OUT &= ~LASER;
 						  if(mirrorCount > 1){
-							  uint16_t oldX = wrench[myIndex];
-							  uint16_t oldY = wrench[myIndex+1];
-							  if(direction == 0){
-								  mirrorX(wrench, wrenchLength);
-								  direction = 1;
-							  } else {
-								  mirrorY(wrench, wrenchLength);
-								  direction = 0;
+							  oldX = wrench[myIndex];
+							  oldY = wrench[myIndex+1];
+
+							  for(i=0; i < wrenchLength; i++){
+								if(i%2 == 0){
+									if(direction == 0){
+									  	wrench[i] = 256 - wrench[i];
+									} else {
+										wrench[i+1] = 256 - wrench[i+1];
+									}
+								 }
 							  }
+							  direction = direction == 1 ? 0 : 1;
+							  stall(0);
+							  P1OUT &= ~LASER;
 							  drawLine(oldX, oldY, wrench[0], wrench[1]);
+							  stall(1);
+							  P1OUT |= LASER;
 						  }
-						  for(laserDelay = 0; laserDelay < 250; laserDelay++)
-							  continue;
-						  P1OUT |= LASER;
 						  myIndex = 0;
 						  mirrorCount = mirrorCount - 1;
 					 }
     	 	 		 } else {
-    	 	 			for(laserDelay = 0; laserDelay < 400; laserDelay++)
-    	 	 				continue;
+    	 	 			stall(0);
     	 	 			P1OUT &= ~LASER;
-    	 	 			mirrorCount = 2;
     	 	 			drawLine(wrench[myIndex], wrench[myIndex+1], leftEye[0], leftEye[1]);
-    	 	 			logoPart = 1;
-    	 	 			for(laserDelay = 0; laserDelay < 250; laserDelay++)
-    	 	 				continue;
+    	 	 			stall(1);
     	 	 			P1OUT |= LASER;
+    	 	 			mirrorCount = 2;
+    	 	 			logoPart = 1;
     	 	 		 }
     	 	 }
 			//draws the eyes
@@ -121,29 +114,30 @@ int main(void) {
     	 	 			drawLine(leftEye[myIndex], leftEye[myIndex+1], leftEye[myIndex+2], leftEye[myIndex+3]);
     	 	 			myIndex = myIndex +2;
     	 	 		} else if(mirrorCount > 1) {
-    	 	 		    for(laserDelay = 0; laserDelay < 400; laserDelay++)
-    	 	 		       continue;
-    	 	 		    P1OUT &= ~LASER;
-    	 	 		    uint16_t oldX = leftEye[myIndex];
-    	 	 		  	uint16_t oldY = leftEye[myIndex+1];
-    	 	 		    	mirrorX(leftEye, eyeLength);
+
+    	 	 		    oldX = leftEye[myIndex];
+    	 	 		  	oldY = leftEye[myIndex+1];
+    	 	 		    	for(i=0; i < eyeLength; i++){
+    	 	 		    		if(i%2 == 0){
+    	 	 		    			leftEye[i] = 256 - leftEye[i];
+    	 	 		    		}
+    	 	 		    	}
+    	 	 		    	stall(0);
+    	 	 		    	P1OUT &= ~LASER;
     	 	 		    drawLine(oldX, oldY, leftEye[0], leftEye[1]);
-    	 	 		    myIndex = 0;
-    	 	 		    for(laserDelay = 0; laserDelay < 250; laserDelay++)
-    	 	 		    		continue;
+    	 	 		    stall(1);
     	 	 		    P1OUT |= LASER;
+    	 	 		    myIndex = 0;
     	 	 		    mirrorCount = mirrorCount - 1;
     	 	 		} else {
-    	 	 			for(laserDelay = 0; laserDelay < 400; laserDelay++)
-    	 	 			    	continue;
+    	 	 			stall(0);
     	 	 			P1OUT &= ~LASER;
-    	 	 			 mirrorCount = 4;
-    	 	 			 drawLine(leftEye[myIndex], leftEye[myIndex+1], nose[0], nose[1]);
-    	 	 			 myIndex = 0;
-    	 	 			 logoPart = 2;
-    	 	 			for(laserDelay = 0; laserDelay < 250; laserDelay++)
-    	 	 				continue;
+    	 	 			drawLine(leftEye[myIndex], leftEye[myIndex+1], nose[0], nose[1]);
+    	 	 			 stall(1);
     	 	 			P1OUT |= LASER;
+    	 	 			 myIndex = 0;
+    	 	 			mirrorCount = 4;
+    	 	 			 logoPart = 2;
     	 	 		}
     	 	 	}
     	 	 	//draws the nose
@@ -152,15 +146,13 @@ int main(void) {
     	 	 		    	 drawLine(nose[myIndex], nose[myIndex+1], nose[myIndex+2], nose[myIndex+3]);
     	 	 		    	 myIndex = myIndex +2;
     	 	 		 } else {
-    	 	 			for(laserDelay = 0; laserDelay < 400; laserDelay++)
-    	 	 			    	 continue;
+    	 	 			stall(0);
     	 	 			P1OUT &= ~LASER;
     	 	 		    	drawLine(nose[myIndex], nose[myIndex+1], face[0], face[1]);
-    	 	 		    	logoPart = 3;
-    	 	 		    	myIndex = 0;
-    	 	 		    	for(laserDelay = 0; laserDelay < 250; laserDelay++)
-    	 	 		    	   continue;
+    	 	 		    stall(1);
     	 	 		    P1OUT |= LASER;
+    	 	 			logoPart = 3;
+    	 	 		    	myIndex = 0;
     	 	 		 }
     	 	 	 }
     	 	 	//draws the face
@@ -169,16 +161,14 @@ int main(void) {
     	 	 		    	drawLine(face[myIndex], face[myIndex+1], face[myIndex+2], face[myIndex+3]);
     	 	 		    	myIndex = myIndex +2;
     	 	 		} else {
-    	 	 			for(laserDelay = 0; laserDelay < 400; laserDelay++)
-    	 	 			   continue;
+    	 	 			stall(0);
     	 	 			P1OUT &= ~LASER;
     	 	 		    	drawLine(face[myIndex], face[myIndex+1], wrench[0], wrench[1]);
-    	 	 		    	logoPart = 0;
-    	 	 		    	myIndex = 0;
-    	 	 		    	mirrorCount = 4;
-    	 	 		    	for(laserDelay = 0; laserDelay < 250; laserDelay++)
-    	 	 		    	    continue;
+    	 	 		    stall(1);
     	 	 		    P1OUT |= LASER;
+    	 	 			logoPart = 0;
+    	 	 		    myIndex = 0;
+    	 	 		    mirrorCount = 4;
     	 	 		}
     	 	 	 }
     	 	 }
@@ -192,7 +182,7 @@ void drawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2){
 	uint16_t dx = x1 > x2 ? x1 - x2 : x2 - x1;
 	uint16_t dy = y1 > y2 ? y1 - y2 : y2 - y1;
 
-	uint16_t steps = dx > dy ? dx/2 : dy/2;
+	uint16_t steps = dx > dy ? dx : dy;
 
 	uint16_t finalSteps = 1;
 	while(finalSteps < steps){
