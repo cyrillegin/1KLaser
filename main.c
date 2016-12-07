@@ -34,48 +34,10 @@ int main(void) {
      UCB0BR1 = 0;
      UCB0CTL1 &= ~UCSWRST;
 
-     //double hex
-//     uint16_t myPoly[] = {192, 128, 160, 183, 96, 183, 64, 128, 95, 72, 160, 72, 192, 128, 160, 128, 144, 155, 112, 155, 96, 128, 111, 100, 144, 100, 160, 128};
-//     uint16_t polyLength = 28;
-//     uint16_t offIndices[] = {12, 26};
-//     uint16_t offLength = 2;
-
-     //penrose triangle
-//     uint16_t myPoly[] = {230, 220, 245, 185, 150, 5, 65, 155, 150, 155, 130, 110, 150, 75, 230, 220, 25, 220, 5, 185, 175, 185, 150, 155, 130, 110, 110, 155, 5, 185, 110, 5, 150, 5};
-//     uint16_t polyLength = 34;
-//     uint16_t offIndices[] = {22, 26, 32};
-//     uint16_t offLength = 3;
-
-     //hack a day all:
-//       uint16_t myPoly[] = {265, 635, 190, 710, 150, 705, 110, 710, 65, 745, 35, 780, 35, 850, 110, 780, 190, 880, 110, 945, 160, 955, 225, 935, 265, 880, 275, 850, 275, 815, 345, 745, 300, 700, 265, 635,
-//    		   385, 310, 275, 205, 275, 170, 245, 105, 190, 70, 150, 65, 110, 70, 190, 140, 110, 240, 35, 170, 35, 205, 65, 280, 110, 310, 150, 315, 180, 310, 295, 405, 325, 350, 385, 310,
-//		   755, 635, 840, 710, 875, 705, 910, 710, 960, 745, 990, 815, 990, 850, 910, 780, 830, 880, 910, 945, 875, 955, 830, 945, 775, 910, 755, 880, 745, 815, 675, 745, 720, 700, 755, 635,
-//		   645, 315, 755, 210, 760, 135, 790, 100, 825, 80, 865, 70, 915, 75, 835, 140, 915, 240, 995, 170, 985, 250, 955, 290, 915, 305, 875, 310, 845, 315, 735, 410, 695, 350, 645, 315,
-//		   320, 390, 510, 305, 700, 390, 750, 545, 700, 690, 650, 745, 620, 805, 585, 805, 560, 745, 550, 745, 525, 805, 485, 805, 470, 745, 460, 745, 435, 805, 395, 805, 375, 730, 320, 690, 270, 545, 320, 390,
-//		   475, 525, 440, 480, 410, 475, 345, 545, 380, 605, 390, 595, 410, 570, 440, 555, 475, 525,
-//		   550, 525, 580, 480, 615, 475, 680, 545, 645, 605, 635, 595, 615, 570, 580, 555, 550, 525,
-//		   510, 615, 520, 660, 535, 695, 510, 660, 485, 695, 500, 660, 510, 615
-//       };
-//       uint16_t polyLength = 234;
-//
-//       uint16_t offIndices[] = {34, 70, 106, 142, 182, 200, 218, 232};
-//       uint16_t offLength = 8;
 
      //lower left wrench
      uint16_t wrench[] = {265, 635, 190, 710, 150, 705, 110, 710, 65, 745, 35, 780, 35, 850, 110, 780, 190, 880, 110, 945, 160, 955, 225, 935, 265, 880, 275, 850, 275, 815, 345, 745, 300, 700, 265, 635};
      volatile uint16_t wrenchLength = 36;
-
-     //upper left wrench
-//     uint16_t myPoly[] = {385, 310, 275, 205, 275, 170, 245, 105, 190, 70, 150, 65, 110, 70, 190, 140, 110, 240, 35, 170, 35, 205, 65, 280, 110, 310, 150, 315, 180, 310, 295, 405, 325, 350, 385, 310};
-//     uint16_t polyLength = 36;
-
-     //lower right wrench
-//     uint16_t myPoly[] = {755, 635, 840, 710, 875, 705, 910, 710, 960, 745, 990, 815, 990, 850, 910, 780, 830, 880, 910, 945, 875, 955, 830, 945, 775, 910, 755, 880, 745, 815, 675, 745, 720, 700, 755, 635};
-//     uint16_t polyLength = 36;
-
-     //upper right wrench
-//     uint16_t myPoly[] = {645, 315, 755, 210, 760, 135, 790, 100, 825, 80, 865, 70, 915, 75, 835, 140, 915, 240, 995, 170, 985, 250, 955, 290, 915, 305, 875, 310, 845, 315, 735, 410, 695, 350, 645, 315};
-//     uint16_t polyLength = 36;
 
      //Skull outer
      uint16_t face[] = {320, 390, 510, 305, 700, 390, 750, 545, 700, 690, 650, 745, 620, 805, 585, 805, 560, 745, 550, 745, 525, 805, 485, 805, 470, 745, 460, 745, 435, 805, 395, 805, 375, 730, 320, 690, 270, 545, 320, 390};
@@ -85,19 +47,13 @@ int main(void) {
        uint16_t leftEye[] = {475, 525, 440, 480, 410, 475, 345, 545, 380, 605, 390, 595, 410, 570, 440, 555, 475, 525};
        uint16_t eyeLength = 18;
 
-     //Right eye
-//       uint16_t rightEye[] = {550, 525, 580, 480, 615, 475, 680, 545, 645, 605, 635, 595, 615, 570, 580, 555, 550, 525};
-//       uint16_t rightEyeLength = 18;
-
      //Nose
        uint16_t nose[] = {510, 615, 520, 660, 535, 695, 510, 660, 485, 695, 500, 660, 510, 615};
        uint16_t noseLength = 14;
 
-     uint16_t offIndices[] = {1};
-     uint16_t offLength = 1;
-
-
-     uint16_t myIndex = 0;
+     mirrorY(face, faceLength, 1024);
+     mirrorY(leftEye, eyeLength, 1024);
+     mirrorY(nose, noseLength, 1024);
 
      uint16_t downsizeIter = 0;
      for(downsizeIter = 0; downsizeIter < wrenchLength; downsizeIter++){
@@ -113,10 +69,11 @@ int main(void) {
        	 face[downsizeIter] = face[downsizeIter]/4;
      }
 
-     int logoPart = 0;
-     int mirrorCount = 4;
-     int laserDelay;
-     int direction = 0;
+     uint16_t myIndex = 0;
+     uint16_t logoPart = 0;
+     uint16_t mirrorCount = 4;
+     uint16_t laserDelay;
+     uint16_t direction = 0;
      while(1){
     	 	 switch(logoPart){
     	 	 	 //Draws the wrenches
@@ -130,8 +87,8 @@ int main(void) {
 							  continue;
 						  P1OUT &= ~LASER;
 						  if(mirrorCount > 1){
-							  int oldX = wrench[myIndex];
-							  int oldY = wrench[myIndex+1];
+							  uint16_t oldX = wrench[myIndex];
+							  uint16_t oldY = wrench[myIndex+1];
 							  if(direction == 0){
 								  mirrorX(wrench, wrenchLength, 256);
 								  direction = 1;
@@ -148,9 +105,15 @@ int main(void) {
 						  mirrorCount = mirrorCount - 1;
 					 }
     	 	 		 } else {
+    	 	 			for(laserDelay = 0; laserDelay < 400; laserDelay++)
+    	 	 				continue;
+    	 	 			P1OUT &= ~LASER;
     	 	 			mirrorCount = 2;
     	 	 			 drawLine(wrench[myIndex], wrench[myIndex+1], leftEye[0], leftEye[1]);
     	 	 			 logoPart = 1;
+    	 	 			for(laserDelay = 0; laserDelay < 250; laserDelay++)
+    	 	 				continue;
+    	 	 			P1OUT |= LASER;
     	 	 		 }
 				 break;
 			//draws the eyes
@@ -162,21 +125,26 @@ int main(void) {
     	 	 		    for(laserDelay = 0; laserDelay < 400; laserDelay++)
     	 	 		       continue;
     	 	 		    P1OUT &= ~LASER;
-    	 	 		    int oldX = leftEye[myIndex];
-    	 	 		    int oldY = leftEye[myIndex+1];
+    	 	 		    uint16_t oldX = leftEye[myIndex];
+    	 	 		  	uint16_t oldY = leftEye[myIndex+1];
     	 	 		    	mirrorX(leftEye, eyeLength, 256);
     	 	 		    drawLine(oldX, oldY, leftEye[0], leftEye[1]);
     	 	 		    myIndex = 0;
     	 	 		    for(laserDelay = 0; laserDelay < 250; laserDelay++)
     	 	 		    		continue;
     	 	 		    P1OUT |= LASER;
-    	 	 		    logoPart++;
     	 	 		    mirrorCount = mirrorCount - 1;
     	 	 		} else {
+    	 	 			for(laserDelay = 0; laserDelay < 400; laserDelay++)
+    	 	 			    	continue;
+    	 	 			P1OUT &= ~LASER;
     	 	 			 mirrorCount = 4;
     	 	 			 drawLine(leftEye[myIndex], leftEye[myIndex+1], nose[0], nose[1]);
     	 	 			 myIndex = 0;
     	 	 			 logoPart = 2;
+    	 	 			for(laserDelay = 0; laserDelay < 250; laserDelay++)
+    	 	 				continue;
+    	 	 			P1OUT |= LASER;
     	 	 		}
     	 	 		break;
     	 	 	//draws the nose
@@ -185,9 +153,15 @@ int main(void) {
     	 	 		    	 drawLine(nose[myIndex], nose[myIndex+1], nose[myIndex+2], nose[myIndex+3]);
     	 	 		    	 myIndex = myIndex +2;
     	 	 		 } else {
+    	 	 			for(laserDelay = 0; laserDelay < 400; laserDelay++)
+    	 	 			    	 continue;
+    	 	 			P1OUT &= ~LASER;
     	 	 		    	drawLine(nose[myIndex], nose[myIndex+1], face[0], face[1]);
     	 	 		    	logoPart = 3;
     	 	 		    	myIndex = 0;
+    	 	 		    	for(laserDelay = 0; laserDelay < 250; laserDelay++)
+    	 	 		    	   continue;
+    	 	 		    P1OUT |= LASER;
     	 	 		 }
     	 	 		 break;
     	 	 	//draws the face
@@ -196,48 +170,20 @@ int main(void) {
     	 	 		    	drawLine(face[myIndex], face[myIndex+1], face[myIndex+2], face[myIndex+3]);
     	 	 		    	myIndex = myIndex +2;
     	 	 		} else {
+    	 	 			for(laserDelay = 0; laserDelay < 400; laserDelay++)
+    	 	 			   continue;
+    	 	 			P1OUT &= ~LASER;
     	 	 		    	drawLine(face[myIndex], face[myIndex+1], wrench[0], wrench[1]);
     	 	 		    	logoPart = 0;
     	 	 		    	myIndex = 0;
     	 	 		    	mirrorCount = 4;
+    	 	 		    	for(laserDelay = 0; laserDelay < 250; laserDelay++)
+    	 	 		    	    continue;
+    	 	 		    P1OUT |= LASER;
     	 	 		}
     	 	 		break;
+    	 	 }
      }
-     }
-
-
-
-
-
-
-
-//     uint16_t offIter;
-
-//     while(1){
-//    	 	 int off = 0;
-//    	 	 for(offIter = 0; offIter < offLength; offIter++){
-//			 if(myIndex == offIndices[offIter]){
-//				 int j;
-//				 for(j = 0; j < 400; j++)
-//					 continue;
-//				P1OUT &= ~LASER;
-//				off = 1;
-//			 }
-//    	 	 }
-//    	 	 if(myIndex < polyLength-3){
-//    	 		drawLine(myPoly[myIndex], myPoly[myIndex+1], myPoly[myIndex+2], myPoly[myIndex+3]);
-//    	 		myIndex = myIndex +2;
-//    	 	 } else {
-//    	 		drawLine(myPoly[myIndex], myPoly[myIndex+1], myPoly[0], myPoly[1]);
-//    	 		myIndex = 0;
-//    	 	 }
-//    	 	 if(off == 1){
-//    	 		int j;
-//    	 		for(j = 0; j < 250; j++)
-//    	 			continue;
-//    	 		 P1OUT |= LASER;
-//    	 	 }
-//     }
 }
 
 void mirrorX(uint16_t *arr, uint16_t length, uint16_t maxX){
