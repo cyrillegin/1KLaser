@@ -14,6 +14,24 @@
 void writeMCP492x(uint16_t data,uint8_t ss);
 void drawLine(uint16_t, uint16_t, uint16_t, uint16_t);
 
+void mirrorX(uint16_t *arr, uint16_t length){
+	uint16_t i;
+	for(i=0; i < length; i++){
+		if(i%2 == 0){
+			arr[i] = 256 - arr[i];
+		}
+	}
+}
+
+void mirrorY(uint16_t *arr, uint16_t length){
+	uint16_t i;
+	for(i=0; i < length; i++){
+		if(i%2 == 1){
+			arr[i] = 256 - arr[i];
+		}
+	}
+}
+
 int main(void) {
     WDTCTL = WDTPW | WDTHOLD;	// Stop watchdog timer
      PM5CTL0 &= ~LOCKLPM5;//sets to 12 mh
@@ -36,38 +54,20 @@ int main(void) {
 
 
      //lower left wrench
-     uint16_t wrench[] = {265, 635, 190, 710, 150, 705, 110, 710, 65, 745, 35, 780, 35, 850, 110, 780, 190, 880, 110, 945, 160, 955, 225, 935, 265, 880, 275, 850, 275, 815, 345, 745, 300, 700, 265, 635};
-     volatile uint16_t wrenchLength = 36;
+     uint16_t wrench[] = {66, 158, 47, 177, 37, 176, 27, 177, 16, 186, 8, 195, 8, 212, 27, 195, 47, 220, 27, 236, 40, 238, 56, 233, 66, 220, 68, 212, 68, 203, 86, 186, 75, 175, 66, 158};
+     uint16_t wrenchLength = 36;
 
-     //Skull outer
-     uint16_t face[] = {320, 390, 510, 305, 700, 390, 750, 545, 700, 690, 650, 745, 620, 805, 585, 805, 560, 745, 550, 745, 525, 805, 485, 805, 470, 745, 460, 745, 435, 805, 395, 805, 375, 730, 320, 690, 270, 545, 320, 390};
+     //face
+     uint16_t face[] = {80, 159, 127, 180, 175, 159, 187, 120, 175, 84, 162, 70, 155, 55, 146, 55, 140, 70, 137, 70, 131, 55, 121, 55, 117, 70, 115, 70, 108, 55, 98, 55, 93, 74, 80, 84, 67, 120, 80, 159};
      uint16_t faceLength = 40;
 
      //Left eye
-       uint16_t leftEye[] = {475, 525, 440, 480, 410, 475, 345, 545, 380, 605, 390, 595, 410, 570, 440, 555, 475, 525};
+     uint16_t leftEye[] = {118, 125, 110, 136, 102, 138, 86, 120, 95, 105, 97, 108, 102, 114, 110, 118, 118, 125};
        uint16_t eyeLength = 18;
 
      //Nose
-       uint16_t nose[] = {510, 615, 520, 660, 535, 695, 510, 660, 485, 695, 500, 660, 510, 615};
-       uint16_t noseLength = 14;
-
-     mirrorY(face, faceLength, 1024);
-     mirrorY(leftEye, eyeLength, 1024);
-     mirrorY(nose, noseLength, 1024);
-
-     uint16_t downsizeIter = 0;
-     for(downsizeIter = 0; downsizeIter < wrenchLength; downsizeIter++){
-    	 	 wrench[downsizeIter] = wrench[downsizeIter]/4;
-     }
-     for(downsizeIter = 0; downsizeIter < eyeLength; downsizeIter++){
-      	 leftEye[downsizeIter] = leftEye[downsizeIter]/4;
-     }
-     for(downsizeIter = 0; downsizeIter < noseLength; downsizeIter++){
-       	nose[downsizeIter] = nose[downsizeIter]/4;
-     }
-     for(downsizeIter = 0; downsizeIter < faceLength; downsizeIter++){
-       	 face[downsizeIter] = face[downsizeIter]/4;
-     }
+     uint16_t nose[] = {127, 103, 130, 91, 133, 83, 127, 91, 121, 83, 125, 91, 127, 103};
+     uint16_t noseLength = 14;
 
      uint16_t myIndex = 0;
      uint16_t logoPart = 0;
@@ -75,9 +75,8 @@ int main(void) {
      uint16_t laserDelay;
      uint16_t direction = 0;
      while(1){
-    	 	 switch(logoPart){
+    	 	 if(logoPart == 0){
     	 	 	 //Draws the wrenches
-    	 	 	 case 0:
     	 	 		 if(mirrorCount > 0){
 					 if(myIndex < wrenchLength-3){
 						drawLine(wrench[myIndex], wrench[myIndex+1], wrench[myIndex+2], wrench[myIndex+3]);
@@ -90,10 +89,10 @@ int main(void) {
 							  uint16_t oldX = wrench[myIndex];
 							  uint16_t oldY = wrench[myIndex+1];
 							  if(direction == 0){
-								  mirrorX(wrench, wrenchLength, 256);
+								  mirrorX(wrench, wrenchLength);
 								  direction = 1;
 							  } else {
-								  mirrorY(wrench, wrenchLength, 256);
+								  mirrorY(wrench, wrenchLength);
 								  direction = 0;
 							  }
 							  drawLine(oldX, oldY, wrench[0], wrench[1]);
@@ -109,15 +108,15 @@ int main(void) {
     	 	 				continue;
     	 	 			P1OUT &= ~LASER;
     	 	 			mirrorCount = 2;
-    	 	 			 drawLine(wrench[myIndex], wrench[myIndex+1], leftEye[0], leftEye[1]);
-    	 	 			 logoPart = 1;
+    	 	 			drawLine(wrench[myIndex], wrench[myIndex+1], leftEye[0], leftEye[1]);
+    	 	 			logoPart = 1;
     	 	 			for(laserDelay = 0; laserDelay < 250; laserDelay++)
     	 	 				continue;
     	 	 			P1OUT |= LASER;
     	 	 		 }
-				 break;
+    	 	 }
 			//draws the eyes
-    	 	 	 case 1:
+    	 	 	if(logoPart == 1){
     	 	 		 if(myIndex < eyeLength-3){
     	 	 			drawLine(leftEye[myIndex], leftEye[myIndex+1], leftEye[myIndex+2], leftEye[myIndex+3]);
     	 	 			myIndex = myIndex +2;
@@ -127,7 +126,7 @@ int main(void) {
     	 	 		    P1OUT &= ~LASER;
     	 	 		    uint16_t oldX = leftEye[myIndex];
     	 	 		  	uint16_t oldY = leftEye[myIndex+1];
-    	 	 		    	mirrorX(leftEye, eyeLength, 256);
+    	 	 		    	mirrorX(leftEye, eyeLength);
     	 	 		    drawLine(oldX, oldY, leftEye[0], leftEye[1]);
     	 	 		    myIndex = 0;
     	 	 		    for(laserDelay = 0; laserDelay < 250; laserDelay++)
@@ -146,9 +145,9 @@ int main(void) {
     	 	 				continue;
     	 	 			P1OUT |= LASER;
     	 	 		}
-    	 	 		break;
+    	 	 	}
     	 	 	//draws the nose
-    	 	 	 case 2:
+    	 	 	 if(logoPart == 2){
     	 	 		 if(myIndex < noseLength-3){
     	 	 		    	 drawLine(nose[myIndex], nose[myIndex+1], nose[myIndex+2], nose[myIndex+3]);
     	 	 		    	 myIndex = myIndex +2;
@@ -163,9 +162,9 @@ int main(void) {
     	 	 		    	   continue;
     	 	 		    P1OUT |= LASER;
     	 	 		 }
-    	 	 		 break;
+    	 	 	 }
     	 	 	//draws the face
-    	 	 	 case 3:
+    	 	 	 if(logoPart == 3){
     	 	 		if(myIndex < faceLength-3){
     	 	 		    	drawLine(face[myIndex], face[myIndex+1], face[myIndex+2], face[myIndex+3]);
     	 	 		    	myIndex = myIndex +2;
@@ -181,35 +180,19 @@ int main(void) {
     	 	 		    	    continue;
     	 	 		    P1OUT |= LASER;
     	 	 		}
-    	 	 		break;
+    	 	 	 }
     	 	 }
-     }
+
 }
 
-void mirrorX(uint16_t *arr, uint16_t length, uint16_t maxX){
-	uint16_t i;
-	for(i=0; i < length; i++){
-		if(i%2 == 0){
-			arr[i] = maxX - arr[i];
-		}
-	}
-}
 
-void mirrorY(uint16_t *arr, uint16_t length, uint16_t maxY){
-	uint16_t i;
-	for(i=0; i < length; i++){
-		if(i%2 == 1){
-			arr[i] = maxY - arr[i];
-		}
-	}
-}
 
 void drawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2){
 
 	uint16_t dx = x1 > x2 ? x1 - x2 : x2 - x1;
 	uint16_t dy = y1 > y2 ? y1 - y2 : y2 - y1;
 
-	uint16_t steps = dx > dy ? dx/2 : dy/2;//(penrose only) use 6 for best result. use 4 or 8 to reduce size by ~15 bytes. 4 blinks and 8 seems too fast though..
+	uint16_t steps = dx > dy ? dx/2 : dy/2;
 
 	uint16_t finalSteps = 1;
 	while(finalSteps < steps){
@@ -220,9 +203,9 @@ void drawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2){
 	uint16_t Xincrement = (dx*128) / finalSteps;
 	uint16_t Yincrement = (dy*128) / finalSteps;
 
-	int x = x1*128;
-	int y = y1*128;
-	int i;
+	uint16_t x = x1*128;
+	uint16_t y = y1*128;
+	uint16_t i;
 
 	for(i = 0; i < finalSteps; i++){
 		x = x1 < x2 ? x+Xincrement : x - Xincrement;
