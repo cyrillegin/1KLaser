@@ -40,29 +40,68 @@ int main(void) {
 //     uint16_t offIndices[] = {12, 26};
 //     uint16_t offLength = 2;
 
-//     uint16_t myPoly[] = {128, 58, 150, 98, 170, 148, 160, 168, 150, 175, 140, 168, 128, 158, 116, 168, 108, 175, 98, 168, 88, 148, 108, 98};
-//     uint16_t polyLength = 24;
-//     uint16_t offIndices[] = {};
-//     uint16_t offLength = 0;
-
-
      //penrose triangle
-     uint16_t myPoly[] = {230, 220, 245, 185, 150, 5, 65, 155, 150, 155, 130, 110, 150, 75, 230, 220, 25, 220, 5, 185, 175, 185, 150, 155, 130, 110, 110, 155, 5, 185, 110, 5, 150, 5};
-     uint16_t polyLength = 34;
-     uint16_t offIndices[] = {22, 26, 32};
-     uint16_t offLength = 3;
+//     uint16_t myPoly[] = {230, 220, 245, 185, 150, 5, 65, 155, 150, 155, 130, 110, 150, 75, 230, 220, 25, 220, 5, 185, 175, 185, 150, 155, 130, 110, 110, 155, 5, 185, 110, 5, 150, 5};
+//     uint16_t polyLength = 34;
+//     uint16_t offIndices[] = {22, 26, 32};
+//     uint16_t offLength = 3;
 
+
+
+     //hack a day all:
+//       uint16_t myPoly[] = {265, 635, 190, 710, 150, 705, 110, 710, 65, 745, 35, 780, 35, 850, 110, 780, 190, 880, 110, 945, 160, 955, 225, 935, 265, 880, 275, 850, 275, 815, 345, 745, 300, 700, 385, 310, 275, 205, 275, 170, 245, 105, 190, 70, 150, 65, 110, 70, 190, 140, 110, 240, 35, 170, 35, 205, 65, 280, 110, 310, 150, 315, 180, 310, 295, 405, 325, 350, 755, 635, 840, 710, 875, 705, 910, 710, 960, 745, 990, 815, 990, 850, 910, 780, 830, 880, 910, 945, 875, 955, 830, 945, 775, 910, 755, 880, 745, 815, 675, 745, 720, 700, 645, 315, 755, 210, 760, 135, 790, 100, 825, 80, 865, 70, 915, 75, 835, 140, 915, 240, 995, 170, 985, 250, 955, 290, 915, 305, 875, 310, 845, 315, 735, 410, 695, 350, 320, 390, 510, 305, 700, 390, 750, 545, 700, 690, 650, 745, 620, 805, 585, 805, 560, 745, 550, 745, 525, 805, 485, 805, 470, 745, 460, 745, 435, 805, 395, 805, 375, 730, 320, 690, 270, 545};
+//       uint16_t polyLength = 174;
+
+     //lower left wrench
+//     uint16_t myPoly[] = {265, 635, 190, 710, 150, 705, 110, 710, 65, 745, 35, 780, 35, 850, 110, 780, 190, 880, 110, 945, 160, 955, 225, 935, 265, 880, 275, 850, 275, 815, 345, 745, 300, 700};
+//     uint16_t polyLength = 34;
+
+     //upper left wrench
+//     uint16_t myPoly[] = {385, 310, 275, 205, 275, 170, 245, 105, 190, 70, 150, 65, 110, 70, 190, 140, 110, 240, 35, 170, 35, 205, 65, 280, 110, 310, 150, 315, 180, 310, 295, 405, 325, 350};
+//     uint16_t polyLength = 34;
+
+     //lower right wrench
+//     uint16_t myPoly[] = {755, 635, 840, 710, 875, 705, 910, 710, 960, 745, 990, 815, 990, 850, 910, 780, 830, 880, 910, 945, 875, 955, 830, 945, 775, 910, 755, 880, 745, 815, 675, 745, 720, 700};
+//     uint16_t polyLength = 34;
+
+     //upper right wrench
+//     uint16_t myPoly[] = {645, 315, 755, 210, 760, 135, 790, 100, 825, 80, 865, 70, 915, 75, 835, 140, 915, 240, 995, 170, 985, 250, 955, 290, 915, 305, 875, 310, 845, 315, 735, 410, 695, 350};
+//     uint16_t polyLength = 34;
+
+     //Skull outer
+//     uint16_t myPoly[] = {320, 390, 510, 305, 700, 390, 750, 545, 700, 690, 650, 745, 620, 805, 585, 805, 560, 745, 550, 745, 525, 805, 485, 805, 470, 745, 460, 745, 435, 805, 395, 805, 375, 730, 320, 690, 270, 545};
+//     uint16_t polyLength = 38;
+
+     //Left eye
+//       uint16_t myPoly[] = {475, 525, 440, 480, 410, 475, 345, 545, 380, 605, 390, 595, 410, 570, 440, 555};
+//       uint16_t polyLength = 16;
+
+     //Right eye
+//       uint16_t myPoly[] = {550, 525, 580, 480, 615, 475, 680, 545, 645, 605, 635, 595, 615, 570, 580, 555};
+//       uint16_t polyLength = 16;
+
+     //Left eye
+       uint16_t myPoly[] = {510, 615, 520, 660, 535, 695, 510, 660, 485, 695, 500, 660};
+       uint16_t polyLength = 12;
+
+     uint16_t offIndices[] = {};
+     uint16_t offLength = 0;
 
      uint16_t offIter = 0;
      uint16_t myIndex = 0;
+
+     uint16_t downsizeIter = 0;
+     for(downsizeIter = 0; downsizeIter < polyLength; downsizeIter++){
+    	 	 myPoly[downsizeIter] = myPoly[downsizeIter]/4;
+     }
 
      while(1){
     	 	 int off = 0;
     	 	 for(offIter = 0; offIter < offLength; offIter++){
 			 if(myIndex == offIndices[offIter]){
 				 int j;
-				 for(j = 0; j < 400; j++)
-					 continue;
+//				 for(j = 0; j < 400; j++)
+//					 continue;
 				P1OUT &= ~LASER;
 				off = 1;
 			 }
@@ -76,8 +115,8 @@ int main(void) {
     	 	 }
     	 	 if(off == 1){
     	 		int j;
-    	 		for(j = 0; j < 250; j++)
-    	 			continue;
+//    	 		for(j = 0; j < 250; j++)
+//    	 			continue;
     	 		 P1OUT |= LASER;
     	 	 }
      }
@@ -88,7 +127,7 @@ void drawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2){
 	uint16_t dx = x1 > x2 ? x1 - x2 : x2 - x1;
 	uint16_t dy = y1 > y2 ? y1 - y2 : y2 - y1;
 
-	uint16_t steps = dx > dy ? dx/6 : dy/6;//(penrose only) use 6 for best result. use 4 or 8 to reduce size by ~15 bytes. 4 blinks and 8 seems too fast though..
+	uint16_t steps = dx > dy ? dx/2 : dy/2;//(penrose only) use 6 for best result. use 4 or 8 to reduce size by ~15 bytes. 4 blinks and 8 seems too fast though..
 
 	uint16_t finalSteps = 1;
 	while(finalSteps < steps){
@@ -96,13 +135,8 @@ void drawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2){
 	}
 	finalSteps = finalSteps >> 1;
 
-	uint16_t Xincrement = (dx*128) / finalSteps ;
-	uint16_t Yincrement = (dy*128) /finalSteps;
-//	while(finalSteps > 2){
-//		Xincrement = Xincrement >> 1;
-//		Yincrement = Yincrement >> 1;
-//		finalSteps = finalSteps << 1;
-//	}
+	uint16_t Xincrement = (dx*128) / finalSteps;
+	uint16_t Yincrement = (dy*128) / finalSteps;
 
 	int x = x1*128;
 	int y = y1*128;
