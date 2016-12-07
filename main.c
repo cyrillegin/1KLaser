@@ -104,12 +104,17 @@ int main(void) {
     	 	 lowerLeftWrenchPoly[downsizeIter] = lowerLeftWrenchPoly[downsizeIter]/4;
      }
 
+     int j;
      int direction = 0;
      while(1){
     	 	 if(myIndex < wrenchLength-3){
     	     	drawLine(lowerLeftWrenchPoly[myIndex], lowerLeftWrenchPoly[myIndex+1], lowerLeftWrenchPoly[myIndex+2], lowerLeftWrenchPoly[myIndex+3]);
     	     	myIndex = myIndex +2;
     	      } else {
+
+    	    	  	  for(j = 0; j < 400; j++)
+    	    		  	  continue;
+    	    	  	  P1OUT &= ~LASER;
     	    	  	int oldX = lowerLeftWrenchPoly[myIndex];
     	    	  	int oldY = lowerLeftWrenchPoly[myIndex+1];
     	    	  	if(direction == 0){
@@ -121,6 +126,9 @@ int main(void) {
     	    	  	}
     	     	drawLine(oldX, oldY, lowerLeftWrenchPoly[0], lowerLeftWrenchPoly[1]);
     	     	myIndex = 0;
+    	     	for(j = 0; j < 250; j++)
+    	     		continue;
+    	     	P1OUT |= LASER;
     	      }
      }
 
