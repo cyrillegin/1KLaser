@@ -33,7 +33,7 @@ int main(void) {
      UCB0BR1 = 0;
      UCB0CTL1 &= ~UCSWRST;
 
-     //left side
+     //The coordinates for the laser to traverse. Even index are X values, odd index are Y values.
      uint8_t logo[] = {66, 158, 47, 177, 37, 176, 27, 177, 16, 186, 8, 195, 8, 212, 27, 195, 47, 220, 27, 236, 40, 238, 56, 233, 66, 220, 68, 212, 68, 203, 86, 186, 75, 175, 66, 158, //lower left wrench:36
          	66, 98, 47, 79, 37, 80, 27, 79, 16, 70, 8, 61, 8, 44, 27, 61, 47, 36, 27, 20, 40, 18, 56, 23, 66, 36, 68, 44, 68, 53, 86, 70, 75, 81, 66, 98, //upper left wrench:36
      		118, 125, 110, 136, 102, 138, 86, 120, 95, 105, 97, 108, 102, 114, 110, 118, 118, 125, //left eye:18
@@ -43,60 +43,71 @@ int main(void) {
 			80, 159, 127, 180, 175, 159, 187, 120, 175, 84, 162, 70, 155, 55, 146, 55, 140, 70, 137, 70, 131, 55, 121, 55, 117, 70, 115, 70, 108, 55, 98, 55, 93, 74, 80, 84, 67, 120, 80, 159,//face: 40
 			127, 103, 130, 91, 133, 83, 127, 91, 121, 83, 125, 91, 127, 103//nose:14
      };
-
+     //keeps track of where in the array we are.
      uint8_t myIndex = 0;
+     //used for creating delays due to the difference in speed between processing and moving a mirror.
      uint16_t counter;
+     /*main program loop. Iterates logo array two at a time and calls drawline function
+      * with either the next four array points or the next two from the index and the
+      * beginning two entries creating a loop.
+      * Also checks if the laser should be turned off while traversing between
+      * two points.
+     */
      while(1){
-    	 	 	if(myIndex < length-3){
-    	 	 		if(myIndex == 34 || myIndex == 70 || myIndex == 88 || myIndex == 124 || myIndex ==160 || myIndex == 178 || myIndex == 218 || myIndex == 232){
-    	 	 			for(counter = 1200; counter > 0; counter--){
-    	 	 				counter = counter- 1;
-    	 	 			}
-    	 	 			P1OUT &= ~LASER;
-    	 	 		}
-    	 	 	    	drawLine(logo[myIndex], logo[myIndex+1], logo[myIndex+2], logo[myIndex+3]);
-    	 	 	    	if(myIndex == 34 || myIndex == 70 || myIndex == 88 || myIndex == 124 || myIndex ==160 || myIndex == 178 || myIndex == 218 || myIndex == 232){
-    	 	 	    		for(counter = 800; counter > 0; counter--){
-    	 	 	    			counter = counter- 1;
-    	 	 	    		}
-    	 	 	    	   P1OUT |= LASER;
-    	 	 	    	}
-    	 	 	    	myIndex = myIndex +2;
-    	 	 	} else {
+    	 	 if(myIndex < length-3){
+    	 	 	//Check if laser should be turned off.
+    	 	 	if(myIndex == 34 || myIndex == 70 || myIndex == 88 || myIndex == 124 || myIndex ==160 || myIndex == 178 || myIndex == 218 || myIndex == 232){
     	 	 		for(counter = 1200; counter > 0; counter--){
     	 	 			counter = counter- 1;
     	 	 		}
     	 	 		P1OUT &= ~LASER;
-    	 	 	    	drawLine(logo[myIndex], logo[myIndex+1], logo[0], logo[1]);
-    	 	 	    	for(counter = 800; counter > 0; counter--){
-    	 	 	    		counter = counter- 1;
-    	 	 	    	}
-    	 	 	    P1OUT |= LASER;
-    	 	 	    myIndex = 0;
     	 	 	}
-    	 	  }
-
+    	 	 	//Draw a line from X,Y to X', Y'
+    	 	    	drawLine(logo[myIndex], logo[myIndex+1], logo[myIndex+2], logo[myIndex+3]);
+    	 	    	//Check if laser should be turned back on.
+    	 	    	if(myIndex == 34 || myIndex == 70 || myIndex == 88 || myIndex == 124 || myIndex ==160 || myIndex == 178 || myIndex == 218 || myIndex == 232){
+    	 	    		for(counter = 800; counter > 0; counter--){
+    	 	    			counter = counter- 1;
+    	 	    		}
+    	 	    	   P1OUT |= LASER;
+    	 	    	}
+    	 	    	myIndex = myIndex +2;
+    	 	 //Loop back to beginning of array.
+    	 	 } else {
+    	 	 	for(counter = 1200; counter > 0; counter--){
+    	 	 		counter = counter- 1;
+    	 	 	}
+    	 	 	P1OUT &= ~LASER;
+    	 	   	drawLine(logo[myIndex], logo[myIndex+1], logo[0], logo[1]);
+    	 	   	for(counter = 800; counter > 0; counter--){
+    	 	    		counter = counter- 1;
+    	 	    	}
+    	 	    P1OUT |= LASER;
+    	 	    myIndex = 0;
+    	 	 }
+    	 }
 }
-
+/*
+ * Given two coordinates, this function will find how many steps are between them
+ * and their coordinates and then send them to the writeMCP482x function.
+ */
 void drawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2){
-
+	//get the distance between x and y.
 	uint16_t dx = x1 > x2 ? x1 - x2 : x2 - x1;
 	uint16_t dy = y1 > y2 ? y1 - y2 : y2 - y1;
 
+	//calculate how many in-between steps are needed.
 	uint16_t steps = dx > dy ? dx : dy;
-
 	uint16_t finalSteps = 1;
 	while(finalSteps < steps){
 		finalSteps = finalSteps << 1;
 	}
 	finalSteps = finalSteps >> 1;
-
 	uint16_t Xincrement = (dx*128) / finalSteps;
 	uint16_t Yincrement = (dy*128) / finalSteps;
 
 	uint16_t x = x1*128;
 	uint16_t y = y1*128;
-
 	for(steps = 0; steps < finalSteps; steps++){
 		x = x1 < x2 ? x+Xincrement : x - Xincrement;
 		y = y1 < y2 ? y+Yincrement : y - Yincrement;
