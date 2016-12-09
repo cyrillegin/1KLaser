@@ -8,9 +8,7 @@
 #define SSX BIT6
 #define SSY BIT7
 
-#define wrenchLength 90
-#define faceLength 54
-
+#define length 234
 
 void writeMCP492x(uint16_t data,uint8_t ss);
 void drawLine(uint16_t, uint16_t, uint16_t, uint16_t);
@@ -36,87 +34,48 @@ int main(void) {
      UCB0CTL1 &= ~UCSWRST;
 
      //left side
-     uint8_t wrench[] = {66, 158, 47, 177, 37, 176, 27, 177, 16, 186, 8, 195, 8, 212, 27, 195, 47, 220, 27, 236, 40, 238, 56, 233, 66, 220, 68, 212, 68, 203, 86, 186, 75, 175, 66, 158, //lower left wrench
-         	66, 98, 47, 79, 37, 80, 27, 79, 16, 70, 8, 61, 8, 44, 27, 61, 47, 36, 27, 20, 40, 18, 56, 23, 66, 36, 68, 44, 68, 53, 86, 70, 75, 81, 66, 98, //upper left wrench
-     		118, 125, 110, 136, 102, 138, 86, 120, 95, 105, 97, 108, 102, 114, 110, 118, 118, 125 //left eye
+     uint8_t logo[] = {66, 158, 47, 177, 37, 176, 27, 177, 16, 186, 8, 195, 8, 212, 27, 195, 47, 220, 27, 236, 40, 238, 56, 233, 66, 220, 68, 212, 68, 203, 86, 186, 75, 175, 66, 158, //lower left wrench:36
+         	66, 98, 47, 79, 37, 80, 27, 79, 16, 70, 8, 61, 8, 44, 27, 61, 47, 36, 27, 20, 40, 18, 56, 23, 66, 36, 68, 44, 68, 53, 86, 70, 75, 81, 66, 98, //upper left wrench:36
+     		118, 125, 110, 136, 102, 138, 86, 120, 95, 105, 97, 108, 102, 114, 110, 118, 118, 125, //left eye:18
+			190, 158, 209, 177, 219, 176, 229, 177, 240, 186, 248, 195, 248, 212, 229, 195, 209, 220, 229, 236, 216, 238, 200, 233, 190, 220, 188, 212, 188, 203, 170, 186, 181, 175, 190, 158,//lower right wrench:36
+			190, 98, 209, 79, 219, 80, 229, 79, 240, 70, 248, 61, 248, 44, 229, 61, 209, 36, 229, 20, 216, 18, 200, 23, 190, 36, 188, 44, 188, 53, 170, 70, 181, 81, 190, 98, //upper right wrench:36
+			138, 125, 146, 136, 154, 138, 170, 120, 161, 105, 159, 108, 154, 114, 146, 118, 138, 125,//right eye: 18
+			80, 159, 127, 180, 175, 159, 187, 120, 175, 84, 162, 70, 155, 55, 146, 55, 140, 70, 137, 70, 131, 55, 121, 55, 117, 70, 115, 70, 108, 55, 98, 55, 93, 74, 80, 84, 67, 120, 80, 159,//face: 40
+			127, 103, 130, 91, 133, 83, 127, 91, 121, 83, 125, 91, 127, 103//nose:14
      };
 
-     //face
-     const uint8_t face[] = {80, 159, 127, 180, 175, 159, 187, 120, 175, 84, 162, 70, 155, 55, 146, 55, 140, 70, 137, 70, 131, 55, 121, 55, 117, 70, 115, 70, 108, 55, 98, 55, 93, 74, 80, 84, 67, 120, 80, 159, 127, 103, 130, 91, 133, 83, 127, 91, 121, 83, 125, 91, 127, 103};
-
      uint8_t myIndex = 0;
-     uint8_t logoPart = 0;
-     uint8_t mirrorCount = 2;
-     uint8_t counter;
+     uint16_t counter;
      while(1){
-    	 	 if(logoPart == 0){
-    	 	 	 //Draws the wrenches
-    	 	 	if(mirrorCount > 0){
-				 if(myIndex < wrenchLength-3){
-					if(myIndex == 34 || myIndex == 70){
-						for(counter = 240; counter > 0; counter--)
-					 	P1OUT &= ~LASER;
-					}
-					drawLine(wrench[myIndex], wrench[myIndex+1], wrench[myIndex+2], wrench[myIndex+3]);
-					if(myIndex == 34 || myIndex == 70){
-				    	   for(counter = 240; counter > 0; counter--)
-				    	   P1OUT |= LASER;
-				    	}
-					myIndex = myIndex +2;
-				  } else {
-					  if(mirrorCount > 1){
-						  myIndex = wrench[myIndex];//used to be 'oldX'
-						  mirrorCount = wrench[myIndex+1];//used to be 'oldY'
-						  for(counter=0; counter < wrenchLength; counter++){
-							if(counter%2 == 0){
-								wrench[counter] = 256 - wrench[counter];
-							 }
-						  }
-						  for(counter = 240; counter > 0; counter--)
-						  P1OUT &= ~LASER;
-						  drawLine(myIndex, mirrorCount, wrench[0], wrench[1]);
-						  for(counter = 240; counter > 0; counter--)
-						  P1OUT |= LASER;
-					  }
-					  myIndex = 0;
-					  mirrorCount = 0;
-				 }
-    	 	 	 } else {
-    	 	 		for(counter = 240; counter > 0; counter--)
-    	 	 		P1OUT &= ~LASER;
-    	 	 		drawLine(wrench[myIndex], wrench[myIndex+1], face[0], face[1]);
-    	 	 		for(counter = 240; counter > 0; counter--)
-    	 	 		P1OUT |= LASER;
-    	 	 		mirrorCount = 2;
-    	 	 		logoPart = 1;
-    	 	 		myIndex = 0;
-    	 	 	 }
-    	 	  }
-
-    	 	 //draws the face and nose
-    	 	  if(logoPart == 1){
-    	 	 	if(myIndex < faceLength-3){
-    	 	 		if(myIndex == 38){
-    	 	 			for(counter = 240; counter > 0; counter--)
+    	 	 	if(myIndex < length-3){
+    	 	 		if(myIndex == 34 || myIndex == 70 || myIndex == 88 || myIndex == 124 || myIndex ==160 || myIndex == 178 || myIndex == 218 || myIndex == 232){
+    	 	 			for(counter = 1200; counter > 0; counter--){
+    	 	 				counter = counter- 1;
+    	 	 			}
     	 	 			P1OUT &= ~LASER;
     	 	 		}
-    	 	 	    	drawLine(face[myIndex], face[myIndex+1], face[myIndex+2], face[myIndex+3]);
-    	 	 	    	if(myIndex == 38){
-    	 	 	    		for(counter = 240; counter > 0; counter--)
+    	 	 	    	drawLine(logo[myIndex], logo[myIndex+1], logo[myIndex+2], logo[myIndex+3]);
+    	 	 	    	if(myIndex == 34 || myIndex == 70 || myIndex == 88 || myIndex == 124 || myIndex ==160 || myIndex == 178 || myIndex == 218 || myIndex == 232){
+    	 	 	    		for(counter = 800; counter > 0; counter--){
+    	 	 	    			counter = counter- 1;
+    	 	 	    		}
     	 	 	    	   P1OUT |= LASER;
     	 	 	    	}
     	 	 	    	myIndex = myIndex +2;
     	 	 	} else {
-    	 	 		for(counter = 240; counter > 0; counter--)
+    	 	 		for(counter = 1200; counter > 0; counter--){
+    	 	 			counter = counter- 1;
+    	 	 		}
     	 	 		P1OUT &= ~LASER;
-    	 	 	    	drawLine(face[myIndex], face[myIndex+1], wrench[0], wrench[1]);
-    	 	 	    	for(counter = 240; counter > 0; counter--)
+    	 	 	    	drawLine(logo[myIndex], logo[myIndex+1], logo[0], logo[1]);
+    	 	 	    	for(counter = 800; counter > 0; counter--){
+    	 	 	    		counter = counter- 1;
+    	 	 	    	}
     	 	 	    P1OUT |= LASER;
-    	 	 		logoPart = 0;
     	 	 	    myIndex = 0;
     	 	 	}
     	 	  }
-     }
+
 }
 
 void drawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2){
