@@ -15,9 +15,9 @@ void drawLine(uint16_t, uint16_t, uint16_t, uint16_t);
 
 int main(void) {
     WDTCTL = WDTPW | WDTHOLD;	// Stop watchdog timer
-     PM5CTL0 &= ~LOCKLPM5;//sets to 12 mh
+     PM5CTL0 &= ~LOCKLPM5;//reset fram
 
-     CSCTL1 |= DCORSEL_4;//?
+     CSCTL1 |= DCORSEL_6;//sets clock speed (16mz)
 
      P1DIR |= BIT0 + SSX + SSY;//p1 output
      P1OUT |= BIT0;//set bit 0
